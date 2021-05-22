@@ -11,6 +11,7 @@ func main() {
 	setupViper()
 	undo := setupLogger()
 	defer undo()
+	zap.L().Info("Testing")
 }
 
 func setupViper() {
