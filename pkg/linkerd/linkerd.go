@@ -19,7 +19,7 @@ func (l *LinkerdReader) FetchTrustAnchor(namespace string, ctx context.Context) 
 	configmap, err := l.client.CoreV1().ConfigMaps(namespace).Get(ctx, configMapName, metav1.GetOptions{})
 	if errors.IsNotFound(err) {
 		return nil, fmt.Errorf("configmap %s not found in namespace %s", configMapName, namespace)
-	} else {
+	} else if err != nil {
 		return nil, fmt.Errorf("failed to retrive configmap %s from namespace %s error: %s", configMapName, namespace, err)
 	}
 	values := configmap.Data["values"]
