@@ -45,7 +45,6 @@ spec:
       job-name: linkerd-cert-notifier
   template:
     metadata:
-      creationTimestamp: null
       labels:
         job-name: linkerd-cert-notifier
     spec:
