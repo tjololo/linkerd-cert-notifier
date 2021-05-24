@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/viper"
 	"github.com/tjololo/linkerd-cert-notifier/pkg/linkerd"
+	"github.com/tjololo/linkerd-cert-notifier/pkg/certificate"
 	"go.uber.org/zap"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -34,13 +35,37 @@ func main() {
 		zap.L().Fatal(fmt.Sprintf("Failed to retrive trustAnchorPEM. %s", err))
 		os.Exit(1)
 	}
-	s := string(pem)
-	zap.L().Info(fmt.Sprintf("fetched configmap: %s", s))
+	expiring, date, err := certificate.AboutToExpire(pem, viper.GetString("earlyexpire.anchor"))
+	if err != nil {
+		zap.L().Fatal(fmt.Sprintf("Failed to check trust anchor certificate. %s", err))
+	}
+	if expiring {
+		zap.L().Warn(fmt.Sprintf("trust anchor cert about to expire. Expiring: %s", date))
+	} else {
+		zap.L().Info(fmt.Sprintf("trust anchor cert not about to expire. Expiring: %s", date))
+	}
+
+	pem, err = lc.FetchIssuerCert("linkerd", ctx)
+	if err != nil {
+		zap.L().Fatal(fmt.Sprintf("Failed to retrive issuerPEM. %s", err))
+		os.Exit(1)
+	}
+	expiring, date, err = certificate.AboutToExpire(pem, viper.GetString("earlyexpire.issuer"))
+	if err != nil {
+		zap.L().Fatal(fmt.Sprintf("Failed to check issuer certificate. %s", err))
+	}
+	if expiring {
+		zap.L().Warn(fmt.Sprintf("issuer cert about to expire. Expiring: %s", date))
+	} else {
+		zap.L().Info(fmt.Sprintf("issuer cert not about to expire. Expiring: %s", date))
+	}
 }
 
 func setupViper() {
-	viper.SetDefault("developmend", false)
+	viper.SetDefault("development", false)
 	viper.SetDefault("namespace", "linkerd")
+	viper.SetDefault("earlyexpire.anchor", "1440h")
+	viper.SetDefault("earlyexpire.issuer", "1440h")
 	viper.SetConfigType("yaml")
 	viper.SetConfigName("config")
 	viper.AddConfigPath("/config")

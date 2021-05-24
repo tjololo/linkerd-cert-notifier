@@ -12,8 +12,9 @@ type Identity struct {
 
 type Issuer struct {
 	Tls Tls `yaml:"tls"`
+	Expiry string `yaml:"crtExpiry"`
 }
 
 type Tls struct {
-	crtPEM string `yaml:"crtPEM"`
+	CrtPEM string `yaml:"crtPEM"`
 }

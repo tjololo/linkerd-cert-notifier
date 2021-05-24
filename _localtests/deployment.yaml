@@ -56,9 +56,29 @@ spec:
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /config
+            name: config
       dnsPolicy: ClusterFirst
       restartPolicy: Never
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
       serviceAccountName: linkerd-cert-notifier
+      volumes:
+      - name: config
+        configMap:
+          defaultMode: 420
+          name: linkerd-cert-notifier
+---
+apiVersion: v1
+data:
+  config.yaml: |
+    development: true
+    earlyexpire:
+      anchor: 8766h
+      issuer: 1440h
+kind: ConfigMap
+metadata:
+  name: linkerd-cert-notifier
+  namespace: linkerd
