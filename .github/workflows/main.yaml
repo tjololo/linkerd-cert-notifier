@@ -31,10 +31,10 @@ jobs:
       run: |
         curl -L https://github.com/google/ko/releases/download/v0.8.3/ko_0.8.3_Linux_x86_64.tar.gz | tar xzf - ko
         chmod +x ./ko
-    - name: Login KO
-      run: ./ko login docker.com --username ${{ secrets.REPO_USERNAME }} --password ${{ secrets.REPO_PASSWORD }}
 
     - name: Publish docker image
       env:
         KO_DOCKER_REPO: ${{ secrets.KO_REPO }}
-      run: ./ko publish -B .
+      run: |
+        ./ko login docker.io --username ${{ secrets.REPO_USERNAME }} --password ${{ secrets.REPO_PASSWORD }}
+        ./ko publish -B .
