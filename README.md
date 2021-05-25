@@ -17,3 +17,6 @@ This will start a kind cluster with local registry and linkerd installed
 Build and deploy the application with the command ```make local-deploy```
 
 Delete the test cluster with: ```kind delete cluster --name kind```
+
+## TODO
+* Include cluster name to identify what cluster that has linkerd certificates about to expire
