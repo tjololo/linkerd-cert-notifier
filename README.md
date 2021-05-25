@@ -4,7 +4,7 @@ Get notified before linkerd certificates expires.
 Currently the application can send notifications to slack webhooks.
 
 Example message in slack:
-![notification](slack-notification.png)
+![notification](doc/slack-notification.png)
 
 The application could be run as a cronjob in the same namespace as your linkerd install.
 
