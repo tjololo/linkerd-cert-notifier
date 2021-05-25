@@ -5,6 +5,8 @@ data:
     slack:
       enabled: {{ .Values.config.slack.enabled }}
       url: {{ .Values.config.slack.url }}
+      username: {{ .Values.config.slack.username }}
+      channel: {{ .Values.config.slack.channel }}
     earlyexpire:
       anchor: {{ .Values.config.earlyexpire.anchor }}
       issuer: {{ .Values.config.earlyexpire.issuer }}

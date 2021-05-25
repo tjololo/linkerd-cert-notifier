@@ -77,6 +77,8 @@ data:
     slack:
       enabled: false
       url: https://hooks.slack.com/services/......
+      username: kind-cluster
+      channel: linkerd-test
     earlyexpire:
       anchor: 1440h
       issuer: 1440h

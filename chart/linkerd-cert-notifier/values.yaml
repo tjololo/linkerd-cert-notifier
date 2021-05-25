@@ -9,6 +9,8 @@ config:
   slack:
     enabled: false
     url: ""
+    username: ""
+    channel: ""
   earlyexpire:
     anchor: 1440h
     issuer: 1440h

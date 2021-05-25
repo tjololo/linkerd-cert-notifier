@@ -66,8 +66,8 @@ func main() {
 	if expiring {
 		zap.L().Warn(fmt.Sprintf("issuer cert about to expire. Expiring: %s", date))
 		err := notification.SendSlackNotification(notification.SlackRequestBody{
-			Username: "linkerd-cert-notifier",
-			Channel: "linkerd-test",
+			Username: viper.GetString("slack.username"),
+			Channel: viper.GetString("slack.channel"),
 			Text: fmt.Sprintf("Issuer cert about to expire. Expiring: %s", date),
 		})
 		if err != nil {
@@ -83,6 +83,8 @@ func setupViper() {
 	viper.SetDefault("namespace", "linkerd")
 	viper.SetDefault("earlyexpire.anchor", "1440h")
 	viper.SetDefault("earlyexpire.issuer", "1440h")
+	viper.SetDefault("slack.username", "linkerd-cert-notifier")
+	viper.SetDefault("slack.channel", "linkerd-alerts")
 	viper.SetConfigType("yaml")
 	viper.SetConfigName("config")
 	viper.AddConfigPath("/config")
