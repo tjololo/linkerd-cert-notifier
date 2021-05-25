@@ -41,4 +41,4 @@ jobs:
         KO_DOCKER_REPO: ${{ secrets.KO_REPO }}
       run: |
         ./ko login docker.io --username ${{ secrets.REPO_USERNAME }} --password ${{ secrets.REPO_PASSWORD }}
-        ./ko publish -B --tag ${{ steps.version.outputs.tag }} .
+        ./ko publish -B --tags ${{ steps.version.outputs.tag }} .
