@@ -1,7 +1,7 @@
 # linkerd-cert-notifier
 Get notified before linkerd certificates expires.
 
-Currently the application can send notifications to slack webhhoks.
+Currently the application can send notifications to slack webhooks.
 
 Example message in slack:
 ![notification](slack-notification.png)
