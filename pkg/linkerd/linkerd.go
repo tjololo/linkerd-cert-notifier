@@ -10,11 +10,13 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-type LinkerdReader struct {
+//Reader struct used for reading linkerd config from kubernetes
+type Reader struct {
 	Client *kubernetes.Clientset
 }
 
-func (l *LinkerdReader) FetchTrustAnchor(namespace string, ctx context.Context) (anchorPem []byte, err error) {
+//FetchTrustAnchor reads trustAnchorPEM from linkerd-config in kubernetes
+func (l *Reader) FetchTrustAnchor(ctx context.Context, namespace string) (anchorPem []byte, err error) {
 	configMapName := "linkerd-config"
 	configmap, err := l.Client.CoreV1().ConfigMaps(namespace).Get(ctx, configMapName, metav1.GetOptions{})
 	if errors.IsNotFound(err) {
@@ -23,7 +25,7 @@ func (l *LinkerdReader) FetchTrustAnchor(namespace string, ctx context.Context) 
 		return nil, fmt.Errorf("failed to retrive configmap %s from namespace %s error: %s", configMapName, namespace, err)
 	}
 	values := configmap.Data["values"]
-	config := LinkerdConfig{}
+	config := Config{}
 	err = yaml.Unmarshal([]byte(values), &config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal values from configmap. %s", err)
@@ -31,7 +33,8 @@ func (l *LinkerdReader) FetchTrustAnchor(namespace string, ctx context.Context) 
 	return []byte(config.IdentityTrustAnchorsPEM), nil
 }
 
-func (l *LinkerdReader) FetchIssuerCert(namespace string, ctx context.Context) (issuerPem []byte, err error) {
+//FetchIssuerCert reads Issuer crtPEM from linkerd-config in kubernetes
+func (l *Reader) FetchIssuerCert(ctx context.Context, namespace string) (issuerPem []byte, err error) {
 	configMapName := "linkerd-config"
 	configmap, err := l.Client.CoreV1().ConfigMaps(namespace).Get(ctx, configMapName, metav1.GetOptions{})
 	if errors.IsNotFound(err) {
@@ -40,10 +43,10 @@ func (l *LinkerdReader) FetchIssuerCert(namespace string, ctx context.Context) (
 		return nil, fmt.Errorf("failed to retrive configmap %s from namespace %s error: %s", configMapName, namespace, err)
 	}
 	values := configmap.Data["values"]
-	config := LinkerdConfig{}
+	config := Config{}
 	err = yaml.Unmarshal([]byte(values), &config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal values from configmap. %s", err)
 	}
-	return []byte(config.Identity.Issuer.Tls.CrtPEM), nil
+	return []byte(config.Identity.Issuer.TLS.CrtPEM), nil
 }

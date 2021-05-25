@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//AboutToExpire returns true if time.Now() + earlyExpirity is after cert.NotAfter date.
 func AboutToExpire(certPEM []byte, earlyExpirity string) (expiring bool, date time.Time, err error) {
 	block, _ := pem.Decode(certPEM)
 	if block == nil {

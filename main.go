@@ -29,9 +29,9 @@ func main() {
 		zap.L().Fatal(fmt.Sprintf("Failed to get kubernetes client. %s", err))
 		os.Exit(1)
 	}
-	lr := linkerd.LinkerdReader{Client: client}
+	lr := linkerd.Reader{Client: client}
 	ctx := context.Background()
-	pem, err := lr.FetchTrustAnchor("linkerd", ctx)
+	pem, err := lr.FetchTrustAnchor(ctx, "linkerd")
 	if err != nil {
 		zap.L().Fatal(fmt.Sprintf("Failed to retrive trustAnchorPEM. %s", err))
 		os.Exit(1)
@@ -44,8 +44,8 @@ func main() {
 		zap.L().Warn(fmt.Sprintf("trust anchor cert about to expire. Expiring: %s", date))
 		err := notification.SendSlackNotification(notification.SlackRequestBody{
 			Username: viper.GetString("slack.username"),
-			Channel: viper.GetString("slack.channel"),
-			Text: fmt.Sprintf("Trust anchor cert about to expire. Expiring: %s", date),
+			Channel:  viper.GetString("slack.channel"),
+			Text:     fmt.Sprintf("Trust anchor cert about to expire. Expiring: %s", date),
 		})
 		if err != nil {
 			zap.L().Fatal(fmt.Sprintf("Failed to send message to slack. %s", err))
@@ -55,7 +55,7 @@ func main() {
 		zap.L().Info(fmt.Sprintf("trust anchor cert not about to expire. Expiring: %s", date))
 	}
 
-	pem, err = lr.FetchIssuerCert("linkerd", ctx)
+	pem, err = lr.FetchIssuerCert(ctx, "linkerd")
 	if err != nil {
 		zap.L().Fatal(fmt.Sprintf("Failed to retrive issuerPEM. %s", err))
 		os.Exit(1)
@@ -68,8 +68,8 @@ func main() {
 		zap.L().Warn(fmt.Sprintf("issuer cert about to expire. Expiring: %s", date))
 		err := notification.SendSlackNotification(notification.SlackRequestBody{
 			Username: viper.GetString("slack.username"),
-			Channel: viper.GetString("slack.channel"),
-			Text: fmt.Sprintf("Issuer cert about to expire. Expiring: %s", date),
+			Channel:  viper.GetString("slack.channel"),
+			Text:     fmt.Sprintf("Issuer cert about to expire. Expiring: %s", date),
 		})
 		if err != nil {
 			zap.L().Fatal(fmt.Sprintf("Failed to send message to slack. %s", err))

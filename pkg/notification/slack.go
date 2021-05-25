@@ -10,19 +10,21 @@ import (
 	"github.com/spf13/viper"
 )
 
+//SlackRequestBody struct used to define slack request body
 type SlackRequestBody struct {
 	Text     string `json:"text"`
 	Username string `json:"username,omitempty"`
 	Channel  string `json:"channel,omitempty"`
 }
 
+//SendSlackNotification send a notification to slack. Webhook URL is fetched from config file (slack.url) using Viper
 func SendSlackNotification(msg SlackRequestBody) error {
 	if !viper.GetBool("slack.enabled") {
 		return nil
 	}
-	webhookUrl := viper.GetString("slack.url")
+	webhookURL := viper.GetString("slack.url")
 	slackBody, _ := json.Marshal(msg)
-	req, err := http.NewRequest(http.MethodPost, webhookUrl, bytes.NewBuffer(slackBody))
+	req, err := http.NewRequest(http.MethodPost, webhookURL, bytes.NewBuffer(slackBody))
 	if err != nil {
 		return err
 	}
