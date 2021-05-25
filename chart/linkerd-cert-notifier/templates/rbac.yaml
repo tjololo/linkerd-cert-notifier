@@ -1,0 +1,22 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "linkerd-cert-notifier.roleName" . }}
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["linkerd-config"]
+  verbs: ["get"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "linkerd-cert-notifier.roleName" . }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "linkerd-cert-notifier.roleName" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "linkerd-cert-notifier.serviceAccountName" . }}
