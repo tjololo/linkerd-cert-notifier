@@ -43,8 +43,8 @@ func main() {
 	if expiring {
 		zap.L().Warn(fmt.Sprintf("trust anchor cert about to expire. Expiring: %s", date))
 		err := notification.SendSlackNotification(notification.SlackRequestBody{
-			Username: "linkerd-cert-notifier",
-			Channel: "linkerd-test",
+			Username: viper.GetString("slack.username"),
+			Channel: viper.GetString("slack.channel"),
 			Text: fmt.Sprintf("Trust anchor cert about to expire. Expiring: %s", date),
 		})
 		if err != nil {
