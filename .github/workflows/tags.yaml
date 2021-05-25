@@ -1,0 +1,44 @@
+name: Build release from tag
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  test:
+    name: Build latest
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get version from tags
+      id: version
+      run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Lint
+      run: |
+        go get golang.org/x/lint/golint
+        golint ./...
+    - name: Build
+      run: go build -v .
+
+    - name: Test
+      run: go test -v ./...
+
+    - name: Install KO
+      run: |
+        curl -L https://github.com/google/ko/releases/download/v0.8.3/ko_0.8.3_Linux_x86_64.tar.gz | tar xzf - ko
+        chmod +x ./ko
+
+    - name: Publish docker image
+      env:
+        KO_DOCKER_REPO: ${{ secrets.KO_REPO }}
+      run: |
+        ./ko login docker.io --username ${{ secrets.REPO_USERNAME }} --password ${{ secrets.REPO_PASSWORD }}
+        ./ko publish -B --tag ${{ steps.version.outputs.tag }} .
