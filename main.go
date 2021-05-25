@@ -7,8 +7,9 @@ import (
 	"os"
 
 	"github.com/spf13/viper"
-	"github.com/tjololo/linkerd-cert-notifier/pkg/linkerd"
 	"github.com/tjololo/linkerd-cert-notifier/pkg/certificate"
+	"github.com/tjololo/linkerd-cert-notifier/pkg/linkerd"
+	"github.com/tjololo/linkerd-cert-notifier/pkg/notification"
 	"go.uber.org/zap"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -41,6 +42,14 @@ func main() {
 	}
 	if expiring {
 		zap.L().Warn(fmt.Sprintf("trust anchor cert about to expire. Expiring: %s", date))
+		err := notification.SendSlackNotification(notification.SlackRequestBody{
+			Username: "linkerd-cert-notifier",
+			Channel: "linkerd-test",
+			Text: fmt.Sprintf("Trust anchor cert about to expire. Expiring: %s", date),
+		})
+		if err != nil {
+			zap.L().Warn(fmt.Sprintf("Failed to send message to slack. %s", err))
+		}
 	} else {
 		zap.L().Info(fmt.Sprintf("trust anchor cert not about to expire. Expiring: %s", date))
 	}
@@ -56,6 +65,14 @@ func main() {
 	}
 	if expiring {
 		zap.L().Warn(fmt.Sprintf("issuer cert about to expire. Expiring: %s", date))
+		err := notification.SendSlackNotification(notification.SlackRequestBody{
+			Username: "linkerd-cert-notifier",
+			Channel: "linkerd-test",
+			Text: fmt.Sprintf("Issuer cert about to expire. Expiring: %s", date),
+		})
+		if err != nil {
+			zap.L().Warn(fmt.Sprintf("Failed to send message to slack. %s", err))
+		}
 	} else {
 		zap.L().Info(fmt.Sprintf("issuer cert not about to expire. Expiring: %s", date))
 	}

@@ -74,8 +74,11 @@ apiVersion: v1
 data:
   config.yaml: |
     development: true
+    slack:
+      enabled: false
+      url: https://hooks.slack.com/services/......
     earlyexpire:
-      anchor: 8766h
+      anchor: 1440h
       issuer: 1440h
 kind: ConfigMap
 metadata:
