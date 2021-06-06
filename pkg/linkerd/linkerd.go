@@ -3,7 +3,9 @@ package linkerd
 import (
 	"context"
 	"fmt"
+	"regexp"
 
+	"github.com/Masterminds/semver"
 	"gopkg.in/yaml.v2"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,6 +32,13 @@ func (l *Reader) FetchTrustAnchor(ctx context.Context, namespace string) (anchor
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal values from configmap. %s", err)
 	}
+	version, err := getLinkerdSemver(config.Global.LinkerdVersion, config.LinkerdVersion)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch linkerd version. %s", err)
+	}
+	if version.LessThan(semver.MustParse("2.10.0")) {
+		return []byte(config.Global.IdentityTrustAnchorsPEM), nil
+	}
 	return []byte(config.IdentityTrustAnchorsPEM), nil
 }
 
@@ -49,4 +58,21 @@ func (l *Reader) FetchIssuerCert(ctx context.Context, namespace string) (issuerP
 		return nil, fmt.Errorf("failed to unmarshal values from configmap. %s", err)
 	}
 	return []byte(config.Identity.Issuer.TLS.CrtPEM), nil
+}
+
+func getLinkerdSemver(globalversionString string, versionString string) (*semver.Version, error) {
+	r := regexp.MustCompile(`^stable-(?P<Version>\d+\.\d+\.\d+)$`)
+	if r.MatchString(versionString) {
+		n := r.FindAllStringSubmatch(versionString, 1)
+		semverString := n[0][1]
+		version, err := semver.NewVersion(semverString)
+		return version, err
+	}
+	if r.MatchString(globalversionString) {
+		n := r.FindAllStringSubmatch(globalversionString, 1)
+		semverString := n[0][1]
+		version, err := semver.NewVersion(semverString)
+		return version, err
+	}
+	return nil, fmt.Errorf("linkerd version did not match expected stable format stable-X.Y.Z, got %s", versionString)
 }
