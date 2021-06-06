@@ -13,6 +13,12 @@ See the chart for example deployment.
 ## Linkerd version supported
 linkerd-cert-notifier is tested with version 2.10.2 and 2.9.5.
 
+Version matrix
+|linkerd-cert-notifier version|linkerd stable-2.9.5|linkerd stable-2.10.2|
+|-----------------------------|--------------------|---------------------|
+|0.0.1                        |:x:                 |:white_check_mark:   |
+|0.1.0                        |:white_check_mark:  |:white_check_mark:   |
+
 ## Local testing
 To test the applicaiton locally run the script ```_localtests/start-test-cluster.sh```.
 This will start a kind cluster with local registry and linkerd installed
