@@ -1,4 +1,4 @@
-name: Build latest from main branch
+name: Run tests and build in branch
 on:
   push:
     branches: 
