@@ -28,5 +28,5 @@ type TLS struct {
 //Global defines global part of linkerd 2.9.x configuration
 type Global struct {
 	IdentityTrustAnchorsPEM string `yaml:"identityTrustAnchorsPEM"`
-	LinkerdVersion          string   `yaml:"linkerdVersion"`
+	LinkerdVersion          string `yaml:"linkerdVersion"`
 }
