@@ -37,5 +37,5 @@ jobs:
       env:
         KO_DOCKER_REPO: ${{ secrets.KO_REPO }}
       run: |
-        ./ko login docker.io --username ${{ secrets.REPO_USERNAME }} --password ${{ secrets.REPO_PASSWORD }}
+        ./ko login ghcr.io --username ${{ secrets.REPO_USERNAME }} --password ${{ secrets.GITHUB_TOKEN }}
         ./ko publish -B .
