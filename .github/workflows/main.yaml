@@ -37,5 +37,5 @@ jobs:
       env:
         KO_DOCKER_REPO: ghcr.io/${{ env.GITHUB_ACTOR}}
       run: |
-        ./ko login ghcr.io --username ${{ env.GITHUB_ACTOR }} --password ${{ secrets.GITHUB_TOKEN }}
+        ./ko login ghcr.io --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_TOKEN }}
         ./ko publish -B .
