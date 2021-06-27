@@ -86,14 +86,13 @@ data:
   config.yaml: |
     development: true
     slack:
-      enabled: true
-      # url: https://hooks.slack.com/services/......
-      url: https://hooks.slack.com/services/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
+      enabled: false
+      url: https://hooks.slack.com/services/......
       username: kind-cluster
       channel: linkerd-test
     earlyexpire:
-      anchor: 14400h
-      issuer: 14400h
+      anchor: 1440h
+      issuer: 1440h
 kind: ConfigMap
 metadata:
   name: linkerd-cert-notifier

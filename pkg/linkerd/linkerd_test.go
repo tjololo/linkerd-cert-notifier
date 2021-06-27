@@ -3,7 +3,7 @@ package linkerd
 import (
 	"testing"
 
-	"github.com/Masterminds/semver"
+	semver "github.com/Masterminds/semver/v3"
 )
 
 func Test_getLinkerdSemver(t *testing.T) {
