@@ -38,7 +38,7 @@ jobs:
 
     - name: Publish docker image
       env:
-        KO_DOCKER_REPO: ${{ secrets.KO_REPO }}
+        KO_DOCKER_REPO: ghcr.io/${{ env.GITHUB_ACTOR }}
       run: |
-        ./ko login docker.io --username ${{ secrets.REPO_USERNAME }} --password ${{ secrets.REPO_PASSWORD }}
+        ./ko login ghcr.io --username ${{ env.GITHUB_ACTOR }} --password ${{ secrets.GITHUB_TOKEN }}
         ./ko publish -B --tags ${{ steps.version.outputs.tag }} .
