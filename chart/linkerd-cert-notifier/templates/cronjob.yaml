@@ -21,6 +21,13 @@ spec:
           - image: {{ .Values.image }}:{{ .Values.tag | default "latest" }}
             imagePullPolicy: IfNotPresent
             name: linkerd-cert-notifier
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
             resources:
               {{- toYaml .Values.resources | nindent 14 }}
             terminationMessagePath: /dev/termination-log

@@ -52,7 +52,17 @@ spec:
         - image: ko://github.com/tjololo/linkerd-cert-notifier
           imagePullPolicy: IfNotPresent
           name: linkerd-cert-notifier
-          resources: {}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 50Mi
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - "ALL"
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -61,7 +71,8 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Never
       schedulerName: default-scheduler
-      securityContext: {}
+      securityContext:
+        runAsNonRoot: true
       terminationGracePeriodSeconds: 30
       serviceAccountName: linkerd-cert-notifier
       volumes:
@@ -75,13 +86,14 @@ data:
   config.yaml: |
     development: true
     slack:
-      enabled: false
-      url: https://hooks.slack.com/services/......
+      enabled: true
+      # url: https://hooks.slack.com/services/......
+      url: https://hooks.slack.com/services/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
       username: kind-cluster
       channel: linkerd-test
     earlyexpire:
-      anchor: 1440h
-      issuer: 1440h
+      anchor: 14400h
+      issuer: 14400h
 kind: ConfigMap
 metadata:
   name: linkerd-cert-notifier
