@@ -9,12 +9,12 @@ type Config struct {
 	Global                  Global   `yaml:"global"`
 }
 
-//Identity partialy defines identity part of linkerd configuration
+//Identity partially defines identity part of linkerd configuration
 type Identity struct {
 	Issuer Issuer `yaml:"issuer"`
 }
 
-//Issuer partialy defines issuer part of linkerd configuration
+//Issuer partially defines issuer part of linkerd configuration
 type Issuer struct {
 	TLS    TLS    `yaml:"tls"`
 	Expiry string `yaml:"crtExpiry"`
