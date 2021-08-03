@@ -1,4 +1,7 @@
 # linkerd-cert-notifier
+[![Go Report Card](https://goreportcard.com/badge/github.com/tjololo/linkerd-cert-notifier)](https://goreportcard.com/report/github.com/tjololo/linkerd-cert-notifier)
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/tjololo/linkerd-cert-notifier.svg)](https://github.com/tjololo/linkerd-cert-notifier)
+
 Get notified before linkerd certificates expires.
 
 Currently the application can send notifications to slack webhooks.
