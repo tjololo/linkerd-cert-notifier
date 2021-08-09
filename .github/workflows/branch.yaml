@@ -33,3 +33,15 @@ jobs:
 
     - name: Build
       run: go build -v .
+
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/golang@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --sarif-file-output=snyk.sarif
+    - name: Upload result to Github Code Scanning
+      uses: actions/codeql-action/upload-sarif-file@v1
+      with:
+        sarif_file: snyk.sarif
