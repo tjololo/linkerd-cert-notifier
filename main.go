@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/spf13/viper"
 	"github.com/tjololo/linkerd-cert-notifier/pkg/certificate"
@@ -22,19 +21,16 @@ func main() {
 	config, err := rest.InClusterConfig()
 	if err != nil {
 		zap.L().Fatal(fmt.Sprintf("Failed to get kubernetes config. %s", err))
-		os.Exit(1)
 	}
 	client, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		zap.L().Fatal(fmt.Sprintf("Failed to get kubernetes client. %s", err))
-		os.Exit(1)
 	}
 	lr := linkerd.Reader{Client: client}
 	ctx := context.Background()
 	pem, err := lr.FetchTrustAnchor(ctx, "linkerd")
 	if err != nil {
 		zap.L().Fatal(fmt.Sprintf("Failed to retrive trustAnchorPEM. %s", err))
-		os.Exit(1)
 	}
 	expiring, date, err := certificate.AboutToExpire(pem, viper.GetString("earlyexpire.anchor"))
 	if err != nil {
@@ -49,7 +45,6 @@ func main() {
 		})
 		if err != nil {
 			zap.L().Fatal(fmt.Sprintf("Failed to send message to slack. %s", err))
-			os.Exit(1)
 		}
 	} else {
 		zap.L().Info(fmt.Sprintf("trust anchor cert not about to expire. Expiring: %s", date))
@@ -58,7 +53,6 @@ func main() {
 	pem, err = lr.FetchIssuerCert(ctx, "linkerd")
 	if err != nil {
 		zap.L().Fatal(fmt.Sprintf("Failed to retrive issuerPEM. %s", err))
-		os.Exit(1)
 	}
 	expiring, date, err = certificate.AboutToExpire(pem, viper.GetString("earlyexpire.issuer"))
 	if err != nil {
@@ -73,7 +67,6 @@ func main() {
 		})
 		if err != nil {
 			zap.L().Fatal(fmt.Sprintf("Failed to send message to slack. %s", err))
-			os.Exit(1)
 		}
 	} else {
 		zap.L().Info(fmt.Sprintf("issuer cert not about to expire. Expiring: %s", date))
