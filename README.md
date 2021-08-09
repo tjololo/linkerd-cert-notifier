@@ -1,6 +1,8 @@
 # linkerd-cert-notifier
-[![Go Report Card](https://goreportcard.com/badge/github.com/tjololo/linkerd-cert-notifier)](https://goreportcard.com/report/github.com/tjololo/linkerd-cert-notifier)
-[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/tjololo/linkerd-cert-notifier.svg)](https://github.com/tjololo/linkerd-cert-notifier)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tjololo/linkerd-cert-notifier)](https://goreportcard.com/report/github.com/tjololo/linkerd-cert-notifier) 
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/tjololo/linkerd-cert-notifier.svg)](https://github.com/tjololo/linkerd-cert-notifier) 
+[![CodeQL](https://github.com/tjololo/linkerd-cert-notifier/workflows/CodeQL/badge.svg)](https://github.com/tjololo/linkerd-cert-notifier/actions?query=workflow%3ACodeQL "Code quality workflow status")
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/tjololo/linkerd-cert-notifier.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/tjololo/linkerd-cert-notifier/alerts/)
 
 Get notified before linkerd certificates expires.
 
