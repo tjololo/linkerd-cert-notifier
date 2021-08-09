@@ -33,3 +33,11 @@ jobs:
 
     - name: Build
       run: go build -v .
+
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/golang@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --sarif-file-output=snyk.sarif
