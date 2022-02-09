@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/Masterminds/semver/v3 v3.1.1
 	github.com/spf13/viper v1.10.1
-	go.uber.org/zap v1.20.0
+	go.uber.org/zap v1.21.0
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/apimachinery v0.22.4
 	k8s.io/client-go v0.22.4
